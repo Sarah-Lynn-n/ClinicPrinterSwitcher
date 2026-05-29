@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, QIcon
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -25,6 +25,9 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QDialogButtonBox,
 )
+
+BASE_DIR = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
+ICON_PATH = BASE_DIR / "assets" / "clinic_printer.ico"
 
 APP_DIR = Path(os.environ.get("PROGRAMDATA", "C:\\ProgramData")) / "ClinicPrinterSwitcher"
 CONFIG_PATH = APP_DIR / "printers.json"
@@ -232,6 +235,8 @@ class PinDialog(QDialog):
         super().__init__(parent)
         self.setWindowTitle("Админ-доступ")
         self.setModal(True)
+        if ICON_PATH.exists():
+            self.setWindowIcon(QIcon(str(ICON_PATH)))
 
         layout = QFormLayout(self)
 
@@ -259,6 +264,8 @@ class AdminDialog(QDialog):
 
         self.setWindowTitle("Администрирование принтеров")
         self.resize(740, 500)
+        if ICON_PATH.exists():
+            self.setWindowIcon(QIcon(str(ICON_PATH)))
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(22, 20, 22, 20)
@@ -376,6 +383,8 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Clinic Printer Switcher")
         self.resize(720, 460)
+        if ICON_PATH.exists():
+            self.setWindowIcon(QIcon(str(ICON_PATH)))
 
         self.build_ui()
         self.apply_theme()
@@ -608,6 +617,8 @@ def main():
 
     app = QApplication(sys.argv)
     app.setFont(QFont("Segoe UI", 10))
+    if ICON_PATH.exists():
+        app.setWindowIcon(QIcon(str(ICON_PATH)))
 
     win = MainWindow()
     win.show()
